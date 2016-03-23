@@ -75,8 +75,10 @@ suite('file.load', function () {
 					opts: opts
 				};
 
-		Promise.resolve(log, data)
-			.then(file.load)
+		fs.empty(opts.dist_folder).then(function () {
+				return [ log, data ];
+			})
+			.spread(file.load)
 			.then(function () {
 				return fs.readFile(job.sched.opts.sources_folder+'/'+data.name, 'utf8').then(function (text) {
 					assert.strictEqual(data.content, text);
@@ -93,8 +95,9 @@ suite('file.load', function () {
 					opts: opts
 				};
 
-		Promise.resolve(log, data)
-			.then(file.load)
+		fs.empty(opts.dist_folder)
+			.then(function () { return [ log, data ];})
+			.spread(file.load)
 			.then(function () {
 				throw Error('not failed');
 			}, function (err) {
@@ -114,8 +117,9 @@ suite('file.load-bin', function () {
 					opts: opts
 				};
 
-		Promise.resolve(log, data)
-			.then(file['load-bin'])
+		fs.empty(opts.dist_folder)
+			.then(function () { return [ log, data ];})
+			.spread(file['load-bin'])
 			.then(function () {
 				return fs.readFile(job.sched.opts.sources_folder+'/'+data.name).then(function (bin) {
 					assert.deepStrictEqual(data.content, bin);
@@ -132,8 +136,9 @@ suite('file.load-bin', function () {
 					opts: opts
 				};
 
-		Promise.resolve(log, data)
-			.then(file.load)
+		fs.empty(opts.dist_folder)
+			.then(function () { return [ log, data ];})
+			.spread(file.load)
 			.then(function () {
 				throw Error('not failed');
 			}, function (err) {
@@ -153,8 +158,9 @@ suite('file.copy', function () {
 					opts: opts
 				};
 
-		Promise.resolve(log, data)
-			.then(file.copy)
+		fs.empty(opts.dist_folder)
+			.then(function () { return [ log, data ];})
+			.spread(file.copy)
 			.then(function () {
 				return Promise.all([
 						fs.readFile(opts.sources_folder+'/'+data.name, 'utf8'),
@@ -174,8 +180,9 @@ suite('file.copy', function () {
 					opts: opts
 				};
 
-		Promise.resolve(log, data)
-			.then(file.copy)
+		fs.empty(opts.dist_folder)
+			.then(function () { return [ log, data ];})
+			.spread(file.copy)
 			.then(function () {
 				throw Error('not failed');
 			}, function (err) {
@@ -195,8 +202,9 @@ suite('file.save', function () {
 					content: 'ogogo!'
 				};
 
-		Promise.resolve(log, data)
-			.then(file.save)
+		fs.empty(opts.dist_folder)
+			.then(function () { return [ log, data ];})
+			.spread(file.save)
 			.then(function () {
 				return Promise.all([
 						fs.readFile(opts.dist_folder+'/'+data.name, 'utf8')]);
@@ -216,8 +224,9 @@ suite('file.save', function () {
 					content: 'ogogo!'
 				};
 
-		Promise.resolve(log, data)
-			.then(file.save)
+		fs.empty(opts.dist_folder)
+			.then(function () { return [ log, data ];})
+			.spread(file.save)
 			.then(function () {
 				return Promise.all([
 						fs.readFile(opts.dist_folder+'/'+data.dest, 'utf8')]);
@@ -237,8 +246,9 @@ suite('file.save', function () {
 					content: new Buffer('1234567890')
 				};
 
-		Promise.resolve(log, data)
-			.then(file.save)
+		fs.empty(opts.dist_folder)
+			.then(function () { return [ log, data ];})
+			.spread(file.save)
 			.then(function () {
 				return Promise.all([
 						fs.readFile(opts.dist_folder+'/'+data.name, null)]);
@@ -257,8 +267,10 @@ suite('file.save', function () {
 					content: 'ogogo!'
 				};
 
-		Promise.resolve(log, data)
-			.then(file.save)
+		fs.empty(opts.dist_folder)
+			.then(function () { return fs.mkpath(opts.dist_folder+'/folder'); })
+			.then(function () { return [ log, data ];})
+			.spread(file.save)
 			.then(function () {
 				throw Error('not failed');
 			}, function (err) {
@@ -276,8 +288,9 @@ suite('file.save', function () {
 					content: new Buffer('ogogo!')
 				};
 
-		Promise.resolve(log, data)
-			.then(file.save)
+		fs.empty(opts.dist_folder)
+			.then(function () { return [ log, data ];})
+			.spread(file.save)
 			.then(function () {
 				throw Error('not failed');
 			}, function (err) {
@@ -295,8 +308,9 @@ suite('file.dont-overwrite', function () {
 					content: 'ogogo!'
 				};
 
-		Promise.resolve(log, data)
-			.then(file['dont-overwrite'])
+		fs.empty(opts.dist_folder)
+			.then(function () { return [ log, data ];})
+			.spread(file['dont-overwrite'])
 			.then(function () {
 				done()
 			}).catch(done);
@@ -310,8 +324,10 @@ suite('file.dont-overwrite', function () {
 					content: 'ogogo!'
 				};
 
-		Promise.resolve(log, data)
-			.then(file['dont-overwrite'])
+		fs.empty(opts.dist_folder)
+			.then(function () { return fs.mkpath(opts.dist_folder+'/folder'); })
+			.then(function () { return [ log, data ];})
+			.spread(file['dont-overwrite'])
 			.then(function () {
 				throw Error('not failed');
 			}, function (err) {
@@ -329,8 +345,10 @@ suite('file.dont-overwrite', function () {
 					content: 'ogogo!'
 				};
 
-		Promise.resolve(log, data)
-			.then(file['dont-overwrite'])
+		fs.empty(opts.dist_folder)
+			.then(function () { return fs.writeFile(opts.dist_folder+'/1.txt', '', 'utf8'); })
+			.then(function () { return [ log, data ];})
+			.spread(file['dont-overwrite'])
 			.then(function () {
 				throw Error('not cancelled');
 			}, function (err) {
@@ -349,10 +367,13 @@ suite('file.load-dist', function () {
 					opts: opts
 				};
 
-		Promise.resolve(log, data)
-			.then(file['load-dist'])
+		fs.empty(opts.dist_folder)
+			.then(function () { return fs.readFile(opts.sources_folder+'/'+data.name, 'utf8'); })
+			.then(function (text) { return fs.writeFile(opts.dist_folder+'/1.txt', text, 'utf8'); })
+			.then(function () { return [ log, data ];})
+			.spread(file['load-dist'])
 			.then(function () {
-				return fs.readFile(job.sched.opts.sources_folder+'/'+data.name, 'utf8').then(function (text) {
+				return fs.readFile(opts.sources_folder+'/'+data.name, 'utf8').then(function (text) {
 					assert.strictEqual(data.content, text);
 					done();
 				});
@@ -367,8 +388,9 @@ suite('file.load-dist', function () {
 					opts: opts
 				};
 
-		Promise.resolve(log, data)
-			.then(file.load)
+		fs.empty(opts.dist_folder)
+			.then(function () { return [ log, data ];})
+			.spread(file.load)
 			.then(function () {
 				throw Error('not failed');
 			}, function (err) {
@@ -389,8 +411,9 @@ suite('file.rename', function () {
 					dest: '\\1not-\\2\\3'
 				};
 
-		Promise.resolve(log, data)
-			.then(file.rename)
+		fs.empty(opts.dist_folder)
+			.then(function () { return [ log, data ];})
+			.spread(file.rename)
 			.then(function () {
 				assert.strictEqual(data.dest, 'not-saved.txt');
 				done();
@@ -406,8 +429,9 @@ suite('file.rename', function () {
 					dest: '\\1\\2.bak'
 				};
 
-		Promise.resolve(log, data)
-			.then(file.rename)
+		fs.empty(opts.dist_folder)
+			.then(function () { return [ log, data ];})
+			.spread(file.rename)
 			.then(function () {
 				assert.strictEqual(data.dest, 'folder/saved.bak');
 				done();
@@ -423,8 +447,9 @@ suite('file.rename', function () {
 					dest: 'oo/\\2.bak'
 				};
 
-		Promise.resolve(log, data)
-			.then(file.rename)
+		fs.empty(opts.dist_folder)
+			.then(function () { return [ log, data ];})
+			.spread(file.rename)
 			.then(function () {
 				assert.strictEqual(data.dest, 'oo/saved.bak');
 				done();
@@ -440,8 +465,9 @@ suite('file.rename', function () {
 					dest: 'file.txt'
 				};
 
-		Promise.resolve(log, data)
-			.then(file.rename)
+		fs.empty(opts.dist_folder)
+			.then(function () { return [ log, data ];})
+			.spread(file.rename)
 			.then(function () {
 				assert.strictEqual(data.dest, 'file.txt');
 				done();
@@ -456,8 +482,9 @@ suite('file.rename', function () {
 					content: 'ogogo!'
 				};
 
-		Promise.resolve(log, data)
-			.then(file.rename)
+		fs.empty(opts.dist_folder)
+			.then(function () { return [ log, data ];})
+			.spread(file.rename)
 			.then(function () {
 				assert.strictEqual(data.dest, 'folder/saved.txt');
 				done();
