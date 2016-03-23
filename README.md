@@ -23,11 +23,11 @@ File operations nano-sched plugin
 
 ## file.load (log, data)
 
-Load file from <options.sources_folder>/<data.name> to the data.content with <data.encoding>='utf8'.
+Load file from `<options.sources_folder>/<data.name>` to the data.content with `<data.encoding>='utf8'`.
 
 ## file.load-bin (log, data)
 
-Load file from <options.sources_folder>/<data.name> to the data.content with <data.encoding>=null.
+Load file from `<options.sources_folder>/<data.name>` to the data.content with `<data.encoding>=null`.
 
 ## file.dont-overwrite (log, data)
 
@@ -35,7 +35,7 @@ Will cancels job if destination file exists.
 
 ## file.rename (log, data)
 
-Generate destination file name by <data.dest> template. The template can contains of shortcuts for
+Generate destination file name by `data.dest` template. The template can contains of shortcuts for
 sources file name parts:
 * \1 -- path to source name
 * \2 -- name of file
@@ -47,11 +47,11 @@ For example, for `data.name = 'blah/foo.bar'` and `data.dest = 'folder/\2\3'` wi
 
 ## file.save (log, data)
 
-Save data.content to <options.dist_folder>/<data.dest || data.name> with encoding <data.encoding>.
+Save data.content to `<options.dist_folder>/<data.dest || data.name>` with encoding `<data.encoding>`.
 
 ## file.copy (log, data)
 
-Copy file from <options.sources_folder>/<data.name> to <options.dist_folder>/<data.dest || data.name>.
+Copy file from `<options.sources_folder>/<data.name>` to `<options.dist_folder>/<data.dest || data.name>`.
 
 
 
