@@ -71,10 +71,11 @@ function fsinit(log, data) {
 		.then(function () { return fs.mkpath(opts.dist_folder+'/folder'); })
 		.then(function () { return fs.readFile(opts.sources_folder+'/1.txt', 'utf8'); })
 		.then(function (text) { return fs.writeFile(opts.dist_folder+'/1.txt', text, 'utf8'); })
+		.catch(function () {
+			return fs.mkpath(opts.dist_folder);
+		})
 		.then(function () {
 			return [ log, data ];
-		}, function () {
-			return fs.mkpath(opts.dist_folder);
 		});
 }
 
