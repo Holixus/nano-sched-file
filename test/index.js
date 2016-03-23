@@ -66,6 +66,18 @@ var file = require('../index.js'),
 		}
 	};
 
+function fsinit(log, data) {
+	return fs.empty(opts.dist_folder)
+		.then(function () { return fs.mkpath(opts.dist_folder+'/folder'); })
+		.then(function () { return fs.readFile(opts.sources_folder+'/1.txt', 'utf8'); })
+		.then(function (text) { return fs.writeFile(opts.dist_folder+'/1.txt', text, 'utf8'); })
+		.then(function () {
+			return [ log, data ];
+		}, function () {
+			return fs.mkpath(opts.dist_folder);
+		});
+}
+
 suite('file.load', function () {
 	test('1 - load', function (done) {
 
@@ -75,9 +87,7 @@ suite('file.load', function () {
 					opts: opts
 				};
 
-		fs.empty(opts.dist_folder).then(function () {
-				return [ log, data ];
-			})
+		fsinit(log, data)
 			.spread(file.load)
 			.then(function () {
 				return fs.readFile(job.sched.opts.sources_folder+'/'+data.name, 'utf8').then(function (text) {
@@ -95,8 +105,7 @@ suite('file.load', function () {
 					opts: opts
 				};
 
-		fs.empty(opts.dist_folder)
-			.then(function () { return [ log, data ];})
+		fsinit(log, data)
 			.spread(file.load)
 			.then(function () {
 				throw Error('not failed');
@@ -117,8 +126,7 @@ suite('file.load-bin', function () {
 					opts: opts
 				};
 
-		fs.empty(opts.dist_folder)
-			.then(function () { return [ log, data ];})
+		fsinit(log, data)
 			.spread(file['load-bin'])
 			.then(function () {
 				return fs.readFile(job.sched.opts.sources_folder+'/'+data.name).then(function (bin) {
@@ -136,8 +144,7 @@ suite('file.load-bin', function () {
 					opts: opts
 				};
 
-		fs.empty(opts.dist_folder)
-			.then(function () { return [ log, data ];})
+		fsinit(log, data)
 			.spread(file.load)
 			.then(function () {
 				throw Error('not failed');
@@ -158,8 +165,7 @@ suite('file.copy', function () {
 					opts: opts
 				};
 
-		fs.empty(opts.dist_folder)
-			.then(function () { return [ log, data ];})
+		fsinit(log, data)
 			.spread(file.copy)
 			.then(function () {
 				return Promise.all([
@@ -180,8 +186,7 @@ suite('file.copy', function () {
 					opts: opts
 				};
 
-		fs.empty(opts.dist_folder)
-			.then(function () { return [ log, data ];})
+		fsinit(log, data)
 			.spread(file.copy)
 			.then(function () {
 				throw Error('not failed');
@@ -202,8 +207,7 @@ suite('file.save', function () {
 					content: 'ogogo!'
 				};
 
-		fs.empty(opts.dist_folder)
-			.then(function () { return [ log, data ];})
+		fsinit(log, data)
 			.spread(file.save)
 			.then(function () {
 				return Promise.all([
@@ -224,8 +228,7 @@ suite('file.save', function () {
 					content: 'ogogo!'
 				};
 
-		fs.empty(opts.dist_folder)
-			.then(function () { return [ log, data ];})
+		fsinit(log, data)
 			.spread(file.save)
 			.then(function () {
 				return Promise.all([
@@ -246,8 +249,7 @@ suite('file.save', function () {
 					content: new Buffer('1234567890')
 				};
 
-		fs.empty(opts.dist_folder)
-			.then(function () { return [ log, data ];})
+		fsinit(log, data)
 			.spread(file.save)
 			.then(function () {
 				return Promise.all([
@@ -267,9 +269,7 @@ suite('file.save', function () {
 					content: 'ogogo!'
 				};
 
-		fs.empty(opts.dist_folder)
-			.then(function () { return fs.mkpath(opts.dist_folder+'/folder'); })
-			.then(function () { return [ log, data ];})
+		fsinit(log, data)
 			.spread(file.save)
 			.then(function () {
 				throw Error('not failed');
@@ -288,8 +288,7 @@ suite('file.save', function () {
 					content: new Buffer('ogogo!')
 				};
 
-		fs.empty(opts.dist_folder)
-			.then(function () { return [ log, data ];})
+		fsinit(log, data)
 			.spread(file.save)
 			.then(function () {
 				throw Error('not failed');
@@ -308,8 +307,7 @@ suite('file.dont-overwrite', function () {
 					content: 'ogogo!'
 				};
 
-		fs.empty(opts.dist_folder)
-			.then(function () { return [ log, data ];})
+		fsinit(log, data)
 			.spread(file['dont-overwrite'])
 			.then(function () {
 				done()
@@ -324,9 +322,7 @@ suite('file.dont-overwrite', function () {
 					content: 'ogogo!'
 				};
 
-		fs.empty(opts.dist_folder)
-			.then(function () { return fs.mkpath(opts.dist_folder+'/folder'); })
-			.then(function () { return [ log, data ];})
+		fsinit(log, data)
 			.spread(file['dont-overwrite'])
 			.then(function () {
 				throw Error('not failed');
@@ -345,9 +341,7 @@ suite('file.dont-overwrite', function () {
 					content: 'ogogo!'
 				};
 
-		fs.empty(opts.dist_folder)
-			.then(function () { return fs.writeFile(opts.dist_folder+'/1.txt', '', 'utf8'); })
-			.then(function () { return [ log, data ];})
+		fsinit(log, data)
 			.spread(file['dont-overwrite'])
 			.then(function () {
 				throw Error('not cancelled');
@@ -367,10 +361,7 @@ suite('file.load-dist', function () {
 					opts: opts
 				};
 
-		fs.empty(opts.dist_folder)
-			.then(function () { return fs.readFile(opts.sources_folder+'/'+data.name, 'utf8'); })
-			.then(function (text) { return fs.writeFile(opts.dist_folder+'/1.txt', text, 'utf8'); })
-			.then(function () { return [ log, data ];})
+		fsinit(log, data)
 			.spread(file['load-dist'])
 			.then(function () {
 				return fs.readFile(opts.sources_folder+'/'+data.name, 'utf8').then(function (text) {
@@ -388,8 +379,7 @@ suite('file.load-dist', function () {
 					opts: opts
 				};
 
-		fs.empty(opts.dist_folder)
-			.then(function () { return [ log, data ];})
+		fsinit(log, data)
 			.spread(file.load)
 			.then(function () {
 				throw Error('not failed');
@@ -411,8 +401,7 @@ suite('file.rename', function () {
 					dest: '\\1not-\\2\\3'
 				};
 
-		fs.empty(opts.dist_folder)
-			.then(function () { return [ log, data ];})
+		fsinit(log, data)
 			.spread(file.rename)
 			.then(function () {
 				assert.strictEqual(data.dest, 'not-saved.txt');
@@ -429,8 +418,7 @@ suite('file.rename', function () {
 					dest: '\\1\\2.bak'
 				};
 
-		fs.empty(opts.dist_folder)
-			.then(function () { return [ log, data ];})
+		fsinit(log, data)
 			.spread(file.rename)
 			.then(function () {
 				assert.strictEqual(data.dest, 'folder/saved.bak');
@@ -447,8 +435,7 @@ suite('file.rename', function () {
 					dest: 'oo/\\2.bak'
 				};
 
-		fs.empty(opts.dist_folder)
-			.then(function () { return [ log, data ];})
+		fsinit(log, data)
 			.spread(file.rename)
 			.then(function () {
 				assert.strictEqual(data.dest, 'oo/saved.bak');
@@ -465,8 +452,7 @@ suite('file.rename', function () {
 					dest: 'file.txt'
 				};
 
-		fs.empty(opts.dist_folder)
-			.then(function () { return [ log, data ];})
+		fsinit(log, data)
 			.spread(file.rename)
 			.then(function () {
 				assert.strictEqual(data.dest, 'file.txt');
@@ -482,8 +468,7 @@ suite('file.rename', function () {
 					content: 'ogogo!'
 				};
 
-		fs.empty(opts.dist_folder)
-			.then(function () { return [ log, data ];})
+		fsinit(log, data)
 			.spread(file.rename)
 			.then(function () {
 				assert.strictEqual(data.dest, 'folder/saved.txt');
