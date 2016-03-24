@@ -12,7 +12,7 @@ File operations nano-sched plugin
 
 ## data object
 
-* options
+* opts `<Object>` options object
   * sources_folder `<String>`
   * dist_folder `<String>`
 * name `<String>`
