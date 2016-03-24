@@ -26,7 +26,7 @@ load: function (log, data) {
 
 'dont-overwrite': function (log, data) {
 	var opts = data.opts,
-	    dest = Path.join(data.opts.dist_folder, data.dest || data.name);
+	    dest = Path.join(opts.dist_folder, data.dest || data.name);
 
 	return fs.stat(dest).then(function (stat) {
 		throw Promise.CANCEL_REASON;
