@@ -13,12 +13,12 @@ File operations nano-sched plugin
 ## data object
 
 * options
-  * sources_folder <String>
-  * dist_folder <String>
-* name <String>
-* dest <String> (Optional)
-* encoding <String>
-* content
+  * sources_folder `<String>`
+  * dist_folder `<String>`
+* name `<String>`
+* dest `<String>` (Optional)
+* encoding `<String>`
+* content `<any>`
 
 
 ## file.load (log, data)
@@ -35,7 +35,7 @@ Will cancels job if destination file exists.
 
 ## file.rename (log, data)
 
-Generate destination file name by `data.dest` template. The template can contains of shortcuts for
+Generate destination file name by `<data.dest>` template. The template can contains of shortcuts for
 sources file name parts:
 * \1 -- path to source name
 * \2 -- name of file
