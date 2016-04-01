@@ -297,6 +297,30 @@ suite('file.save', function () {
 				done();
 			}).catch(done);
 	});
+
+	test('2.3 - save to exist folder', function (done) {
+		var log = new Logger('save', job),
+		    data = {
+					name: 'folder/1.e',
+					opts: opts,
+					encoding: 'utf8',
+					content: 'ogogo!'
+				};
+
+		Promise.resolve(log, data)
+			.then(file.save)
+			.then(function () {
+				return file.save(log, data);
+			})
+			.then(function () {
+				return Promise.all([
+						fs.readFile(opts.dist_folder+'/'+data.name, 'utf8')]);
+			})
+			.spread(function (dst) {
+				assert.strictEqual(data.content, dst);
+				done();
+			}).catch(done);
+	});
 });
 
 suite('file.dont-overwrite', function () {
