@@ -98,6 +98,24 @@ suite('file.load', function () {
 			}).catch(done);
 	});
 
+	test('1 - load', function (done) {
+
+		var log = new Logger('load', job),
+		    data = {
+					name: '1.txt',
+					opts: opts
+				};
+
+		fsinit(log, data)
+			.spread(file.load)
+			.then(function () {
+				return fs.readFile(job.sched.opts.sources_folder+'/'+data.name, 'utf8').then(function (text) {
+					assert.strictEqual(data.content, text);
+					done();
+				});
+			}).catch(done);
+	});
+
 	test('2 - load of apsent file', function (done) {
 
 		var log = new Logger('load', job),
@@ -155,6 +173,55 @@ suite('file.load-bin', function () {
 			}).catch(done);
 	});
 
+});
+
+suite('file.load-json', function () {
+	test('1 - load', function (done) {
+
+		var log = new Logger('load-json', job),
+		    data = {
+					name: '1.json',
+					test: '{ "a": "ogo" }',
+					opts: opts
+				};
+
+		fsinit(log, data)
+			.then(function () {
+				return fs.writeFile(job.sched.opts.sources_folder+'/'+data.name, data.test, { encoding: 'utf8' })
+					.then(function () {
+						return [log, data];
+					});
+			})
+			.spread(file['load-json'])
+			.then(function () {
+				assert.deepStrictEqual(data.content, eval('('+data.test+')'));
+				done();
+			}).catch(done);
+	});
+
+	test('1 - load bad file', function (done) {
+
+		var log = new Logger('load-json', job),
+		    data = {
+					name: '1.json',
+					test: '{ a: "ogo" }',
+					opts: opts
+				};
+
+		fsinit(log, data)
+			.then(function () {
+				return fs.writeFile(job.sched.opts.sources_folder+'/'+data.name, data.test, { encoding: 'utf8' })
+					.then(function () {
+						return [log, data];
+					});
+			})
+			.spread(file['load-json'])
+			.then(function () {
+				throw Error('not failed');
+			}, function (e) {
+				done();
+			}).catch(done);
+	});
 });
 
 suite('file.copy', function () {

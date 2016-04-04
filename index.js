@@ -15,12 +15,23 @@ load: function (log, data) {
 		});
 },
 
+
 'load-bin': function (log, data) {
 	var opts = data.opts,
 	    src = Path.join(data.sources_folder || opts.sources_folder, data.name);
 	return fs.readFile(src, data.encoding = null)
 		.then(function (text) {
 			data.content = text;
+		});
+},
+
+'load-json': function (log, data) {
+	var opts = data.opts,
+	    src = Path.join(data.sources_folder || opts.sources_folder, data.name);
+	return fs.readFile(src, 'utf8')
+		.then(function (text) {
+			data.encoding = 'json';
+			data.content = JSON.parse(text);
 		});
 },
 
