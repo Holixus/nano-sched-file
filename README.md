@@ -29,6 +29,10 @@ Load file from `<options.sources_folder>/<data.name>` to the data.content with `
 
 Load file from `<options.sources_folder>/<data.name>` to the data.content with `<data.encoding>=null`.
 
+## file.load-json (log, data)
+
+Load file from `<options.sources_folder>/<data.name>` and parse to the data.content with `<data.encoding>='json'`.
+
 ## file.dont-overwrite (log, data)
 
 Will cancels job if destination file exists.
@@ -47,7 +51,7 @@ For example, for `data.name = 'blah/foo.bar'` and `data.dest = 'folder/\2\3'` wi
 
 ## file.save (log, data)
 
-Save data.content to `<options.dist_folder>/<data.dest || data.name>` with encoding `<data.encoding>`.
+Save data.content to `<options.dist_folder>/<data.dest || data.name>` with encoding `<data.encoding>`('utf8','json',null).
 
 ## file.copy (log, data)
 
