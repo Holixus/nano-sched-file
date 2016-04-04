@@ -205,6 +205,7 @@ suite('file.save', function () {
 		    data = {
 					name: 'saved.txt',
 					opts: opts,
+					encoding: 'utf8',
 					content: 'ogogo!'
 				};
 
@@ -226,6 +227,7 @@ suite('file.save', function () {
 					name: 'saved.txt',
 					dest: 'another.txt',
 					opts: opts,
+					encoding: 'utf8',
 					content: 'ogogo!'
 				};
 
@@ -262,11 +264,33 @@ suite('file.save', function () {
 			}).catch(done);
 	});
 
+	test('1.4 - save json data', function (done) {
+		var log = new Logger('save', job),
+		    data = {
+					name: 'saved.json',
+					opts: opts,
+					encoding: 'json',
+					content: { a: 1 }
+				};
+
+		fsinit(log, data)
+			.spread(file.save)
+			.then(function () {
+				return Promise.all([
+						fs.readFile(opts.dist_folder+'/'+data.name, null)]);
+			})
+			.spread(function (dst) {
+				assert.deepStrictEqual(data.content, eval('('+dst+')'));
+				done();
+			}).catch(done);
+	});
+
 	test('2.1 - save to folder (not to file)', function (done) {
 		var log = new Logger('save', job),
 		    data = {
 					name: 'folder',
 					opts: opts,
+					encoding: 'utf8',
 					content: 'ogogo!'
 				};
 
@@ -318,6 +342,24 @@ suite('file.save', function () {
 			})
 			.spread(function (dst) {
 				assert.strictEqual(data.content, dst);
+				done();
+			}).catch(done);
+	});
+
+	test('2.4 - save with bad encoding', function (done) {
+		var log = new Logger('save', job),
+		    data = {
+					name: 'folder',
+					opts: opts,
+					encoding: 'utf',
+					content: 'ogogo!'
+				};
+
+		fsinit(log, data)
+			.spread(file.save)
+			.then(function () {
+				throw Error('not failed');
+			}, function (err) {
 				done();
 			}).catch(done);
 	});

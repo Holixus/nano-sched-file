@@ -68,7 +68,16 @@ save: function (log, data) {
 				throw err;
 		})*/
 		.then(function () {
-			return fs.writeFile(dest, data.content, { encoding: data.encoding });
+			switch (data.encoding) {
+			case 'utf8':
+			case null:
+				return fs.writeFile(dest, data.content, { encoding: data.encoding });
+			case 'json':
+				var text = require('nano-json').render(data.content, { });
+				return fs.writeFile(dest, text, { encoding: 'utf8' });
+			default:
+				throw Error('unknown data encoding: '+require('nano-json').js2str(data.encoding)+'');
+			}
 		});
 },
 
